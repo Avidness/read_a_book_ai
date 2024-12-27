@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import './App.css';
+import { useStreamFetcher } from "./hooks/useStreamFetcher";
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
+  console.log(apiUrl)
+  const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Input:</h3>
+      <input
+        className='textbox'
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <button
+        className='bigBtn'
+        onClick={fetchStream()}
+        disabled={isStreaming}
+      >
+        Submit
+      </button>
+
+      {streamData.map((chunk, index) => (
+        <div key={index}>
+          <ReactMarkdown>{chunk}</ReactMarkdown>
+        </div>
+      ))}
     </div>
   );
 }
