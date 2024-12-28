@@ -6,12 +6,11 @@ import { useStreamFetcher } from "./hooks/useStreamFetcher";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 function App() {
-  console.log(apiUrl)
   const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (e) => {
-    fetchStream('', { input: e.target.value });
+    fetchStream('send_input', { 'user_input': inputValue });
   };
 
   return (
