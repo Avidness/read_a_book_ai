@@ -1,0 +1,62 @@
+ID,Name,Description,Category
+0,Parrot,A type of bird,Animal
+1,Apple,Red and sweet fruit,Fruit
+2,Carrot,Orange and crunchy vegetable,Vegetable
+3,Chicken,Lean protein meat,Meat
+4,Rice,Staple grain food,Grain
+5,Milk,Dairy product rich in calcium,Dairy
+6,Banana,Yellow and soft fruit,Fruit
+7,Potato,Brown and starchy vegetable,Vegetable
+8,Beef,Red protein-rich meat,Meat
+9,Wheat,Whole grain used in bread,Grain
+10,Cheese,Milk-derived product with varied textures,Dairy
+11,Penguin,A flightless bird found in cold climates,Animal
+12,Lion,A large carnivorous mammal and apex predator,Animal
+13,Python,High-level programming language,Coding Tool
+14,JavaScript,Scripting language primarily for web development,Coding Tool
+15,C++,Object-oriented programming language used in system software,Coding Tool
+16,Norway,Scandinavian country known for fjords,Country
+17,Kenya,East African country famous for safaris,Country
+18,Amazon,A massive online retailer and cloud services provider,Company
+19,Tesla,Innovative electric vehicle manufacturer,Company
+20,Cloudflare,Internet security and performance company,Company
+21,Honeybee,An insect known for producing honey,Animal
+22,Elephant,Large herbivorous mammal with a trunk,Animal
+23,HTML,Markup language for structuring web content,Coding Tool
+24,CSS,Style sheet language for describing web layouts,Coding Tool
+25,Ruby,Programming language designed for simplicity,Coding Tool
+26,Italy,European country known for pasta and Renaissance art,Country
+27,Japan,Asian country famous for technology and sushi,Country
+28,Google,Tech company specializing in search engines and AI,Company
+29,Meta,Parent company of Facebook and Instagram,Company
+30,Microsoft,Technology corporation behind Windows and Office,Company
+31,Shark,A cartilaginous fish known for its sharp teeth,Animal
+32,Kangaroo,Australian marsupial known for jumping,Animal
+33,Git,Version control system for managing code changes,Coding Tool
+34,SQL,Language for managing relational databases,Coding Tool
+35,TensorFlow,Open-source machine learning framework,Coding Tool
+36,Germany,European country known for engineering and cars,Country
+37,Brazil,South American country famous for Carnival and football,Country
+38,Apple,Technology company that produces iPhones and Macs,Company
+39,IBM,Long-standing tech company known for innovation,Company
+40,SpaceX,Aerospace manufacturer focused on space exploration,Company
+41,Eagle,A large bird of prey with keen eyesight,Animal
+42,Tiger,A large carnivorous feline found in Asia,Animal
+43,PHP,Scripting language for web development,Coding Tool
+44,Rust,Programming language emphasizing safety and concurrency,Coding Tool
+45,Switzerland,European country known for neutrality and chocolate,Country
+46,India,South Asian country with a rich cultural heritage,Country
+47,Adobe,Company known for creative software like Photoshop,Company
+48,Samsung,South Korean conglomerate known for electronics,Company
+49,Google Cloud,Cloud computing platform for developers,Company
+50,Squirrel,Small tree-dwelling rodent with a bushy tail,Animal
+51,Dog,Domesticated mammal known as a loyal pet,Animal
+52,Go,Programming language optimized for simplicity and efficiency,Coding Tool
+53,Docker,Tool for containerizing applications,Coding Tool
+54,Ubuntu,Popular Linux distribution for servers and desktops,Coding Tool
+55,Canada,North American country known for its vast wilderness,Country
+56,China,Asian country with the largest population,Country
+57,Twitter,Social media platform for sharing short updates,Company
+58,LinkedIn,Professional networking social platform,Company
+59,Zoom,Video conferencing platform,Company
+60,Falcon,A bird of prey known for its speed,Animal
