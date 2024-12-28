@@ -10,6 +10,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.post("/")
 async def main():
     return 'hello world'

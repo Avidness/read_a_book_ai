@@ -10,6 +10,10 @@ function App() {
   const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
   const [inputValue, setInputValue] = useState('');
 
+  const handleSubmit = (e) => {
+    fetchStream('', { input: e.target.value });
+  };
+
   return (
     <div className="App">
       <h3>Input:</h3>
@@ -21,7 +25,7 @@ function App() {
       />
       <button
         className='bigBtn'
-        onClick={fetchStream()}
+        onClick={handleSubmit}
         disabled={isStreaming}
       >
         Submit
