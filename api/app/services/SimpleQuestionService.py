@@ -1,4 +1,4 @@
-import json
+from app.db.PineconeAdapter import PineconeAdapter
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
@@ -14,9 +14,17 @@ class SimpleQuestionService:
         self.llm = self.llm.bind(response_format={"type": "json_object"})
 
     async def do_things(self):
+        
+        # Query pinecone first
+        adapter = PineconeAdapter()
+        results = adapter.query_index(self.user_input)
+        print(results)
+
         prompt = (
             f"You will think step-by-step and answer the following question: \n",
-            f"{self.user_input}\n",
+            f"<START_QUESTION>{self.user_input}<END_QUESTION>\n",
+            f"Respond only using the results from below:\n",
+            f"<START_RESULTS>{results}<END_RESULTS>\n",
             f"All of your responses should be in JSON format.\n",
         )
 
