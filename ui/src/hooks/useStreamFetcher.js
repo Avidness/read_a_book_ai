@@ -8,7 +8,6 @@ export const useStreamFetcher = (apiUrl) => {
     if (isStreaming) return;
 
     setIsStreaming(true);
-    setStreamData([]);
 
     try {
       const response = await fetch(`${apiUrl}/${endpoint}`, {
