@@ -1,0 +1,11 @@
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# VS Code settings
+.vscode/
+.history/
+*.code-workspace
