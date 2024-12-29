@@ -49,22 +49,19 @@ Separate agents need to coordinate together to ensure consistency with informati
 ## Features
 
 ### Agents
-1. **Outline Generator**: 
-   - Creates a comprehensive outline for the book.
+1. **Big Picture Architect**: 
+   - Creates an outline of the chapters and characters in the book.
 
-2. **Character Builder**:
-   - Develops and manages detailed character profiles.
-
-3. **Chapter Writer**:
+1. **Chapter Writer**:
    - Writes each chapter in a loop based on the outline.
 
-4. **Summarize Chapter**:
+1. **Summarize Chapter**:
    - Summarizes the previous chapter and passes the summary and outline to the next chapter for continuity.
 
-5. **Proofreader**:
+1. **Proofreader**:
    - Proofreads each chapter for consistency and coherence.
 
-7. **Consistency Checker**:
+1. **Consistency Checker**:
    - Searches the vector database for each theme and character to ensure consistency throughout the book.
 
 ---
