@@ -1,6 +1,6 @@
-from app.services.SimpleQuestionService import SimpleQuestionService
+from app.agents.SimpleQuestionAgent import SimpleQuestionAgent
 
 async def pipeline_core(user_input: str):
-  sqs = SimpleQuestionService(user_input)
-  async for result in sqs.do_things():
+  agent = SimpleQuestionAgent(user_input)
+  async for result in agent.do_things():
     yield result

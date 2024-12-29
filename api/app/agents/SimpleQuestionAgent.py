@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
 
-class SimpleQuestionService:
+class SimpleQuestionAgent:
     def __init__(self, user_input):
         self.user_input = user_input
         load_dotenv()
