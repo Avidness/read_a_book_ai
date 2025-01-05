@@ -1,7 +1,9 @@
-from app.models import Chapter, Character
+from app.models.Chapter import Chapter
+from app.models.Character import Character
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
+import json
 
 class BigPictureArchitectAgent:
     def __init__(self, book_topic):
@@ -29,7 +31,8 @@ class BigPictureArchitectAgent:
         )
 
         response = await self.llm.ainvoke(prompt)
-        outline_data = response.content
+        outline_data = json.loads(response.content)
+        chapters = outline_data.get("chapters", [])
 
         chapters = [
             Chapter(chapter_id=chapter["chapter_id"], chapter_name=chapter["chapter_name"], chapter_summary=chapter["chapter_summary"])
