@@ -2,17 +2,11 @@ from app.models.Chapter import Chapter
 from app.models.Character import Character
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
-from dotenv import load_dotenv
-import os
 import json
 
 class BigPictureArchitectAgent:
     def __init__(self, book_topic):
         self.book_topic = book_topic
-        load_dotenv()
-        openai_key = os.getenv('OPENAI_API_KEY')
-        os.environ["OPENAI_API_KEY"] = openai_key
-
         self.llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
         self.llm = self.llm.bind(response_format={"type": "json_object"})
 

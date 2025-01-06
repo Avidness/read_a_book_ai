@@ -4,6 +4,8 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.pipeline.core import pipeline_core
 from app.models.UserInput import UserInput
+from dotenv import load_dotenv
+import os
 
 app = FastAPI()
 app.add_middleware(
@@ -13,6 +15,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    # Perform tasks you want to run at application startup
+    print("Application is starting...")
+    load_dotenv()
+    openai_key = os.getenv('OPENAI_API_KEY')
+    os.environ["OPENAI_API_KEY"] = openai_key
+    print("Startup tasks completed.")
 
 @app.post("/init_pinecone")
 async def init_pc():
