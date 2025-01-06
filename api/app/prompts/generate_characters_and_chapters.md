@@ -1,8 +1,9 @@
 You are an expert in creating book outlines. Create a comprehensive and detailed outline for a book on the following topic:
 
-{book_topic}
+<BOOK_TOPIC>{book_topic}</BOOK_TOPIC>
 
 The outline must return a JSON object with the following structure:
+<SAMPLE_RESPONSE_STRUCTURE>
 {{
   "chapters": [
     {{
@@ -24,3 +25,4 @@ The outline must return a JSON object with the following structure:
     }}
   ]
 }}
+</SAMPLE_RESPONSE_STRUCTURE>
