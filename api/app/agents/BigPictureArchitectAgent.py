@@ -1,6 +1,7 @@
 from app.models.Chapter import Chapter
 from app.models.Character import Character
 from langchain_openai import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
 import json
@@ -16,19 +17,8 @@ class BigPictureArchitectAgent:
         self.llm = self.llm.bind(response_format={"type": "json_object"})
 
     async def generate_outline(self):
-        prompt = (
-            f"You are an expert in creating book outlines. Create a comprehensive and detailed outline for a book on the following topic:\n"
-            f"<START_TOPIC>{self.book_topic}<END_TOPIC>\n"
-            f"The outline must return a JSON object with the following structure:\n"
-            f"{{\n"
-            f"  \"chapters\": [\n"
-            f"    {{\"chapter_id\": 1, \"chapter_name\": \"name of the chapter\", \"chapter_summary\": \"description of what should happen in this chapter\"}}\n"
-            f"  ],\n"
-            f"  \"characters\": [\n"
-            f"    {{\"character_name\": \"name of character\", \"arc\": \"description of the major plot points the character has through the book\", \"physical_desc\": \"a brief description of the character's physical appearance\", \"psychological_desc\": \"a breakdown of the character's psychological profile and personality type\"}}\n"
-            f"  ]\n"
-            f"}}"
-        )
+        prompt_template = PromptTemplate.from_file("app/prompts/generate_characters_and_chapters.md")
+        prompt = prompt_template.format(book_topic=self.book_topic)
 
         response = await self.llm.ainvoke(prompt)
         outline_data = json.loads(response.content)
