@@ -33,7 +33,7 @@ class BigPictureArchitect:
                 for character in json_resp.get("characters", [])
             ]
 
-            return Outline(chapters=chapters, characters=characters)
+            return Outline(book_topic=self.book_topic, chapters=chapters, characters=characters)
         
     async def generate_outline(self):
         prompt_template = PromptTemplate.from_file("app/prompts/generate_characters_and_chapters.md")
