@@ -32,13 +32,16 @@ async def init_pc():
     adapter = PineconeAdapter()
     adapter.create_index()
     data = [
-        {'id': 'vec1', 'text': 'Apple is a popular fruit known for its sweetness and crisp texture.'},
-        {'id': 'vec2', 'text': 'The tech company Apple is known for its innovative products like the iPhone.'},
-        {'id': 'vec3', 'text': 'Many people enjoy eating apples as a healthy snack.'},
-        {'id': 'vec4', 'text': 'Apple Inc. has revolutionized the tech industry with its sleek designs and user-friendly interfaces.'},
-        {'id': 'vec5', 'text': 'An apple a day keeps the doctor away, as the saying goes.'},
-        {'id': 'vec6', 'text': 'Apple Computer Company was founded on April 1, 1976, by Steve Jobs, Steve Wozniak, and Ronald Wayne as a partnership.'}
+        {'id': 'fact1', 'text': 'Testopia is a mythical land where all trials of skill, logic, and endurance are sent to be tested for their worth.'},
+        {'id': 'fact2', 'text': 'The Testmasters Guild, founded centuries ago, holds an annual event called the Trial of Triumph to determine the sharpest mind in the realm.'},
+        {'id': 'fact3', 'text': 'John, a swift and ambitious adventurer, has a long-standing aversion to testing, believing it slows him down and wastes precious time.'},
+        {'id': 'fact4', 'text': 'Legends speak of the Puzzle of Infinity, a test so complex that even the founders of Testopia, Testar, Solvet, and Examina, could not solve it.'},
+        {'id': 'fact5', 'text': 'In Testopia, the saying "A test unattempted is a lesson unlearned" is inscribed on the gates of the Guild’s great hall.'},
+        {'id': 'fact6', 'text': 'John’s aversion to testing stems from a failed attempt at the Maze of Mirrors, where he lost precious weeks trying to navigate its reflective puzzles.'},
+        {'id': 'fact7', 'text': 'The Testmasters Guild has recently begun experimenting with interactive, real-time tests designed to challenge even the fastest thinkers like John.'},
+        {'id': 'fact8', 'text': 'Many citizens of Testopia view testing as a sacred ritual, while others, like John, see it as a frustrating obstacle to progress.'}
     ]
+
     adapter.upsert_data(data)
     return
 
