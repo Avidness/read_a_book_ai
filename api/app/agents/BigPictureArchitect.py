@@ -4,9 +4,8 @@ from app.models.Outline import Outline
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import json
-from typing import Any, Dict
 
-class BigPictureArchitectAgent:
+class BigPictureArchitect:
     def __init__(self, book_topic):
         self.book_topic = book_topic
         self.llm = ChatOpenAI(model="gpt-4o", temperature=0.7)

@@ -1,10 +1,10 @@
-from app.agents.BigPictureArchitectAgent import BigPictureArchitectAgent
+from app.agents.BigPictureArchitect import BigPictureArchitect
 
 async def pipeline_core(user_input: str):
   yield "Beginning request..."
 
   try:
-      agent = BigPictureArchitectAgent(user_input)
+      agent = BigPictureArchitect(user_input)
       outline = await agent.generate_outline()
       
       for chap in outline.chapters:
