@@ -1,18 +1,20 @@
 from app.agents.BigPictureArchitect import BigPictureArchitect
 
 async def pipeline_core(user_input: str):
-  yield "Beginning request..."
+  #yield "Beginning request..."
 
   try:
       agent = BigPictureArchitect(user_input)
       outline = await agent.generate_outline()
       
+      yield outline.to_json()
+      '''
       for chap in outline.chapters:
         yield chap.to_json()
 
       for char in outline.characters:
         yield char.to_json()
-    
+      '''
   except Exception as e:
       yield f"Error running core pipeline: {e}"
 
