@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Book, Users, ChevronRight, ChevronDown, MessageSquare, Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useStreamFetcher } from "./hooks/useStreamFetcher";
+import BookIcon from './components/BookIcon';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -69,7 +70,7 @@ const App = () => {
       <div className="w-64 min-w-64 bg-stone-800 border-r border-stone-700">
         {/* Title Section */}
         <div className="flex items-center gap-2 p-4 border-b border-stone-700">
-          <Book className="w-6 h-6 text-amber-400" />
+          <BookIcon className="w-9 h-9"/>
           <h1 className="text-xl font-bold text-amber-50">CorpusAI</h1>
         </div>
 
