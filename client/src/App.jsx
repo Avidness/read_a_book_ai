@@ -1,11 +1,28 @@
 import React, { useState } from 'react';
-import { Book, Users, ChevronRight, ChevronDown, MessageSquare } from 'lucide-react';
+import { Book, Users, ChevronRight, ChevronDown, MessageSquare, Send } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { useStreamFetcher } from "./hooks/useStreamFetcher";
+
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const App = () => {
+  // Sidebar state
   const [isChapterOpen, setIsChapterOpen] = useState(false);
   const [isCharacterOpen, setIsCharacterOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+  // Chat state
+  const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSubmit = (e) => {
+    e?.preventDefault();
+    if (!inputValue.trim() || isStreaming) return;
+    
+    fetchStream('send_input', { 'user_input': inputValue });
+    setInputValue('');
+  };
 
   // Sample data
   const chapters = [
@@ -125,21 +142,43 @@ const App = () => {
       {/* Main Chat Window */}
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex-1 p-4 overflow-auto">
-          {/* Chat messages would go here */}
-          <div className="flex items-center justify-center h-full text-amber-200/60">
-            <div className="flex flex-col items-center gap-2">
-              <MessageSquare className="w-12 h-12" />
-              <p>Start a new conversation</p>
+          {streamData.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-amber-200/60">
+              <div className="flex flex-col items-center gap-2">
+                <MessageSquare className="w-12 h-12" />
+                <p>Start a new conversation</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-4">
+              {streamData.map((chunk, index) => (
+                <div key={index} className="text-amber-50 prose prose-invert max-w-none">
+                  <ReactMarkdown>{chunk}</ReactMarkdown>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
         {/* Chat input */}
         <div className="p-4 border-t border-stone-700 bg-stone-800">
-          <input
-            type="text"
-            placeholder="Type your message..."
-            className="w-full p-2 bg-stone-700 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 text-amber-50 placeholder-amber-200/30"
-          />
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 p-2 bg-stone-700 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 text-amber-50 placeholder-amber-200/30"
+              disabled={isStreaming}
+            />
+            <button
+              type="submit"
+              disabled={isStreaming || !inputValue.trim()}
+              className="px-4 py-2 bg-amber-600 text-amber-50 rounded-lg hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </form>
         </div>
       </div>
 
