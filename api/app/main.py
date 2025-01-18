@@ -4,6 +4,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.pipeline.core import pipeline_core
 from app.models.UserInput import UserInput
+from app.db.neo4jAdapter import FriendshipGraph
 from dotenv import load_dotenv
 import os
 
@@ -44,6 +45,15 @@ async def init_pc():
 
     adapter.upsert_data(data)
     return
+
+@app.get("/init_neo4j")
+async def init_neo4j():
+    graph = FriendshipGraph()
+    graph.add_friend("Arthur", "Guinevere")
+    graph.add_friend("Arthur", "Lancelot")
+    graph.add_friend("Arthur", "Merlin")
+    graph.print_friends("Arthur")
+    
 
 @app.post("/send_input")
 async def ai_request(input_data: UserInput):

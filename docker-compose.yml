@@ -23,17 +23,16 @@ services:
       - "3000:3000"
     stdin_open: true
 
-
-  mongo:
-    image: mongo:4.4
-    container_name: mongo
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-    volumes:
-      - novel-ai-data:/data/db/
+  neo4j:
+    image: neo4j:5.26.0-community
+    container_name: neo4j_db
     ports:
-      - '27017:27017'
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    volumes:
+      - neo4j_data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/password
 
 volumes:
-  novel-ai-data:
+  neo4j_data:

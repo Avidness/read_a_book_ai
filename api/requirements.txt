@@ -4,3 +4,4 @@ python-dotenv
 pymongo
 langchain-openai
 pinecone[grpc]
+neo4j
