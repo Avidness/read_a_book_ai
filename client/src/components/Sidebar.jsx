@@ -17,15 +17,15 @@ const Sidebar = ({ chapters, characters, onItemClick }) => {
   };
 
   return (
-    <div className="w-64 min-w-64 bg-stone-800 border-r border-stone-700">
+    <div className="w-64 min-w-64 bg-stone-800 border-r border-stone-700 flex flex-col h-full">
       {/* Title Section */}
-      <div className="flex items-center gap-2 p-4 border-b border-stone-700">
+      <div className="flex items-center gap-2 p-4 border-b border-stone-700 shrink-0">
         <BookIcon className="w-9 h-9" />
         <h1 className="text-xl font-bold text-amber-50">CorpusAI</h1>
       </div>
 
       {/* Collapsible Sections */}
-      <div className="p-2">
+      <div className="p-2 overflow-y-auto flex-1">
         <ChapterList
           chapters={chapters}
           isOpen={isChapterOpen}
