@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Book, Users, ChevronRight, ChevronDown, MessageSquare, Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useStreamFetcher } from "./hooks/useStreamFetcher";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from './components/Dialog';
 import BookIcon from './components/BookIcon';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -10,12 +17,29 @@ const App = () => {
   // Sidebar state
   const [isChapterOpen, setIsChapterOpen] = useState(false);
   const [isCharacterOpen, setIsCharacterOpen] = useState(false);
-  const [selectedChapter, setSelectedChapter] = useState(null);
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
+  // Content state
+  const [chapters, setChapters] = useState([]);
+  const [characters, setCharacters] = useState([]);
 
   // Chat state
   const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
   const [inputValue, setInputValue] = useState('');
+
+  // Process stream data for both chat and content objects
+  React.useEffect(() => {
+    streamData.forEach(chunk => {
+      try {
+        const data = JSON.parse(chunk);
+        setChapters(data["chapters"]);
+        setCharacters(data["characters"]);
+      } catch (error) {
+        console.error(error)
+      }
+    });
+  }, [streamData]);
 
   const handleSubmit = (e) => {
     e?.preventDefault();
@@ -25,44 +49,45 @@ const App = () => {
     setInputValue('');
   };
 
-  // Sample data
-  const chapters = [
-    { id: 1, title: "Chapter 1: The Beginning", content: "Lorem ipsum..." },
-    { id: 2, title: "Chapter 2: The Journey", content: "Dolor sit amet..." },
-    { id: 3, title: "Chapter 3: The Climax", content: "Consectetur adipiscing..." }
-  ];
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsDialogOpen(true);
+  };
 
-  const characters = [
-    { id: 1, name: "Alice", description: "The protagonist" },
-    { id: 2, name: "Bob", description: "The antagonist" },
-    { id: 3, name: "Charlie", description: "The mentor" }
-  ];
+  const ChapterDialog = ({ chapter }) => (
+    <DialogContent className="bg-stone-800 text-amber-50 border-stone-700">
+      <DialogHeader>
+        <DialogTitle className="text-xl font-bold">
+          Chapter {chapter["chapter_id"]}: {chapter["chapter_name"]}
+        </DialogTitle>
+      </DialogHeader>
+      <div className="space-y-4">
+        <p className="mt-2">{chapter[["chapter_summary"]]}</p>
+      </div>
+    </DialogContent>
+  );
 
-  // Modal component
-  const Modal = ({ isOpen, onClose, children, size = "md" }) => {
-    if (!isOpen) return null;
-
-    const sizeClasses = {
-      sm: "max-w-lg",
-      md: "max-w-2xl",
-    };
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className={`bg-stone-800 rounded-lg ${sizeClasses[size]} w-full`}>
-          <div className="p-6 text-amber-50">
-            {children}
-            <button
-              onClick={onClose}
-              className="mt-4 px-4 py-2 bg-stone-700 rounded-lg hover:bg-stone-600 text-amber-50"
-            >
-              Close
-            </button>
-          </div>
+  const CharacterDialog = ({ character }) => (
+    <DialogContent className="bg-stone-800 text-amber-50 border-stone-700">
+      <DialogHeader>
+        <DialogTitle className="text-xl font-bold">{character["character_name"]}</DialogTitle>
+      </DialogHeader>
+      <div className="space-y-4">
+        <div>
+          <h4 className="font-semibold">Character Arc</h4>
+          <p className="mt-2">{character["arc"]}</p>
+        </div>
+        <div>
+          <h4 className="font-semibold">Physical Description</h4>
+          <p className="mt-2">{character["physical_desc"]}</p>
+        </div>
+        <div>
+          <h4 className="font-semibold">Psychological Profile</h4>
+          <p className="mt-2">{character["psychological_desc"]}</p>
         </div>
       </div>
-    );
-  };
+    </DialogContent>
+  );
 
   return (
     <div className="flex h-screen w-full bg-stone-900">
@@ -96,11 +121,11 @@ const App = () => {
               <div className="space-y-1">
                 {chapters.map((chapter) => (
                   <button
-                    key={chapter.id}
-                    onClick={() => setSelectedChapter(chapter)}
+                    key={chapter["chapter_id"]}
+                    onClick={() => handleItemClick(chapter)}
                     className="w-full p-2 text-sm text-left text-amber-50 hover:bg-stone-700 rounded-lg pl-8"
                   >
-                    {chapter.title}
+                    Chapter {chapter["chapter_id"]}: {chapter["chapter_name"]}
                   </button>
                 ))}
               </div>
@@ -127,11 +152,11 @@ const App = () => {
               <div className="space-y-1">
                 {characters.map((character) => (
                   <button
-                    key={character.id}
-                    onClick={() => setSelectedCharacter(character)}
+                    key={character["character_name"]}
+                    onClick={() => handleItemClick(character)}
                     className="w-full p-2 text-sm text-left text-amber-50 hover:bg-stone-700 rounded-lg pl-8"
                   >
-                    {character.name}
+                    {character["character_name"]}
                   </button>
                 ))}
               </div>
@@ -183,25 +208,11 @@ const App = () => {
         </div>
       </div>
 
-      {/* Chapter Modal */}
-      <Modal
-        isOpen={!!selectedChapter}
-        onClose={() => setSelectedChapter(null)}
-        size="md"
-      >
-        <h2 className="text-xl font-bold mb-4">{selectedChapter?.title}</h2>
-        <p>{selectedChapter?.content}</p>
-      </Modal>
-
-      {/* Character Modal */}
-      <Modal
-        isOpen={!!selectedCharacter}
-        onClose={() => setSelectedCharacter(null)}
-        size="sm"
-      >
-        <h2 className="text-xl font-bold mb-4">{selectedCharacter?.name}</h2>
-        <p>{selectedCharacter?.description}</p>
-      </Modal>
+      {/* Dialog for both Chapter and Character details */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        {selectedItem?.type === 'chapter' && <ChapterDialog chapter={selectedItem} />}
+        {selectedItem?.type === 'character' && <CharacterDialog character={selectedItem} />}
+      </Dialog>
     </div>
   );
 };
