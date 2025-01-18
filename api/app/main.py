@@ -19,7 +19,6 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    # Perform tasks you want to run at application startup
     print("Application is starting...")
     load_dotenv()
     openai_key = os.getenv('OPENAI_API_KEY')
