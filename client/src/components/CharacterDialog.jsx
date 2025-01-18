@@ -8,15 +8,15 @@ import {
 
 const CharacterSection = ({ title, content }) => (
   <div>
-    <h4 className="font-semibold">{title}</h4>
-    <p className="mt-2">{content}</p>
+    <h4 className="font-semibold text-white">{title}</h4>
+    <p className="mt-2 text-white">{content}</p>
   </div>
 );
 
 const CharacterDialog = ({ character }) => (
-  <DialogContent className="bg-stone-800 text-amber-50 border-stone-700">
+  <DialogContent className="bg-stone-800 text-white border-stone-700">
     <DialogHeader>
-      <DialogTitle className="text-xl font-bold">
+      <DialogTitle className="text-xl font-bold text-white">
         {character.character_name}
       </DialogTitle>
     </DialogHeader>
