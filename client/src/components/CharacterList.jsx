@@ -13,11 +13,11 @@ const CharacterList = ({ characters, isOpen, onToggle, onCharacterClick }) => {
       >
         {characters.map((character) => (
           <button
-            key={character.character_name}
+            key={character.name}
             onClick={() => onCharacterClick(character)}
             className="w-full p-2 text-sm text-left text-amber-50 hover:bg-stone-700 rounded-lg pl-8"
           >
-            {character.character_name}
+            {character.name}
           </button>
         ))}
       </CollapsibleSection>

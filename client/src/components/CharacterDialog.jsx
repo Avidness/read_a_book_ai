@@ -17,7 +17,7 @@ const CharacterDialog = ({ character }) => (
   <DialogContent className="bg-stone-800 text-white border-stone-700">
     <DialogHeader>
       <DialogTitle className="text-xl font-bold text-white">
-        {character.character_name}
+        {character.name}
       </DialogTitle>
     </DialogHeader>
     <div className="space-y-4">
