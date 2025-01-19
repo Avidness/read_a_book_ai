@@ -2,7 +2,7 @@ from pydantic import BaseModel
 import json
 
 class Character(BaseModel):
-    character_name: str
+    name: str
     arc: str
     physical_desc: str
     psychological_desc: str

@@ -1,12 +1,14 @@
-from app.db import PineconeAdapter
+from app.models.Character import Character
+from app.services.neo4j.CharacterGraph import CharacterGraph
+from api.app.services.pinecone import BaseAdapter
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.pipeline.core import pipeline_core
 from app.models.UserInput import UserInput
-from app.db.neo4jAdapter import FriendshipGraph
 from dotenv import load_dotenv
 import os
+import json
 
 app = FastAPI()
 app.add_middleware(
@@ -29,7 +31,7 @@ async def startup_event():
 async def init_pc():
     
     # WIP add some basic data to Pinecone
-    adapter = PineconeAdapter()
+    adapter = BaseAdapter()
     adapter.create_index()
     data = [
         {'id': 'fact1', 'text': 'Testopia is a mythical land where all trials of skill, logic, and endurance are sent to be tested for their worth.'},
@@ -44,15 +46,6 @@ async def init_pc():
 
     adapter.upsert_data(data)
     return
-
-@app.get("/init_neo4j")
-async def init_neo4j():
-    graph = FriendshipGraph()
-    graph.add_friend("Arthur", "Guinevere")
-    graph.add_friend("Arthur", "Lancelot")
-    graph.add_friend("Arthur", "Merlin")
-    graph.print_friends("Arthur")
-    
 
 @app.post("/send_input")
 async def ai_request(input_data: UserInput):

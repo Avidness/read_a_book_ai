@@ -1,4 +1,5 @@
 from app.agents.BigPictureArchitect import BigPictureArchitect
+from app.services.neo4j.CharacterGraph import CharacterGraph
 
 async def pipeline_core(user_input: str):
   #yield "Beginning request..."
@@ -8,6 +9,13 @@ async def pipeline_core(user_input: str):
       outline = await agent.generate_outline()
       
       yield outline.to_json()
+
+      with CharacterGraph() as graph:
+          for c in outline.characters:
+            
+            print(f"Adding character: {c.name}")
+            graph.add_character(c)
+            
       '''
       for chap in outline.chapters:
         yield chap.to_json()

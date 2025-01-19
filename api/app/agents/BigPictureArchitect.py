@@ -25,7 +25,7 @@ class BigPictureArchitect:
 
             characters = [
                 Character(
-                    character_name=character["character_name"],
+                    name=character["name"],
                     arc=character["arc"],
                     physical_desc=character["physical_desc"],
                     psychological_desc=character["psychological_desc"]
