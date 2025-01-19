@@ -1,6 +1,6 @@
 from app.models.Character import Character
 from app.services.neo4j.CharacterGraph import CharacterGraph
-from api.app.services.pinecone import BaseAdapter
+from app.services.pinecone import PineconeAdapter
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,7 +31,7 @@ async def startup_event():
 async def init_pc():
     
     # WIP add some basic data to Pinecone
-    adapter = BaseAdapter()
+    adapter = PineconeAdapter()
     adapter.create_index()
     data = [
         {'id': 'fact1', 'text': 'Testopia is a mythical land where all trials of skill, logic, and endurance are sent to be tested for their worth.'},
