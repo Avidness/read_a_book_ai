@@ -3,7 +3,9 @@
 
 **🏗️ Work in Progress 🏗️**
 
-## Case 1: Read a book
+## Description:
+
+### Case 1: Read a book
 Take a large blob of text like a book and extract key elements:
 * Themes
 * Characters
@@ -14,10 +16,10 @@ Store text blobs into Pinecone, Objects like Characters are stored in Neo4j.
 
 Ask AI a questions and receive citations.
 
-## Case 2: Write a book
+### Case 2: Write a book
 Generate Characters and relationship graph (stored in Neo4j), write each chapter (stored in Pinecone).
 
-## Case 3: Collaborative Writing
+### Case 3: Collaborative Writing
 
 Start from a generated or existing book. Change characters, or writings, generate a new book based on your changes.
 
