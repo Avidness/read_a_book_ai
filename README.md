@@ -63,25 +63,6 @@ Start from a generated or existing book. Change characters, or writings, generat
 
 ---
 
-
-## Features
-
-### Agents
-1. **Big Picture Architect**: 
-   - Creates an outline of the chapters and characters in the book.
-
-1. **Chapter Writer**:
-   - Writes each chapter in a loop based on the outline.
-
-1. **Summarize Chapter**:
-   - Summarizes the previous chapter and passes the summary and outline to the next chapter for continuity.
-
-1. **Proofreader**:
-   - Proofreads each chapter for consistency and coherence.
-
-1. **Consistency Checker**:
-   - Searches the vector database for each theme and character to ensure consistency throughout the book.
-
 ---
 
 ## License
