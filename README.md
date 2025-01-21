@@ -61,9 +61,5 @@ Start from a generated or existing book. Change characters, or writings, generat
    docker-compose up
    ```
 
----
-
----
-
 ## License
 MIT
