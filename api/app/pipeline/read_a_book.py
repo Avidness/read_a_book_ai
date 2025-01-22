@@ -1,14 +1,24 @@
 import json
-'''
-# Batch job to process bits at a time
-# When AI finds a character, it will check the DB for an existing one and either update or create in neo4j
-# Also keep track of relationships
-# store each chunk in pinecone
-# Retain chapter summaries
-'''
+from app.agents.SummaryExtractor import SummaryExtractor
+from app.utils.file_utils import chunkify_textblob
+
 async def process_book(result: str):
-    print(result)
+    blob = result["processed_data"]["text_content"]
+    
+    chunks = chunkify_textblob(blob)
+
+    yield "Extracted file text -> Splitting into chunks" + str(len(chunks))
+
+    results = []
+    for chunk in chunks[:2]:
+        SummaryExtractor
+
+        agent = SummaryExtractor(chunk)
+        result = await agent.run()
+        print(result)
+        results.append(result)
+
     yield json.dumps({
         "filename": "result.filename",
-        "processed_data": "test"
+        "processed_data": chunks
     })

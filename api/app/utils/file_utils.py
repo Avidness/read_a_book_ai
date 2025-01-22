@@ -84,3 +84,36 @@ async def extract_file_content(file: UploadFile = File(...)):
         if file_path.exists():
             file_path.unlink()
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+def chunkify_textblob(text, chunk_size=10000, overlap=100):
+    if len(text) <= chunk_size:
+        return [text]
+    
+    chunks = []
+    start = 0
+    
+    while start < len(text):
+        end = start + chunk_size
+        
+        # Find word boundary within overlap region
+        if end < len(text):
+            search_end = min(end + overlap, len(text))
+            next_space = text.rfind(' ', end, search_end)
+            if next_space != -1:
+                end = next_space
+        else:
+            end = len(text)
+        
+        chunks.append(text[start:end].strip())
+        
+        if end == len(text):
+            break
+        
+        # Adjust start position for next chunk
+        start = end - overlap
+        next_word = text.find(' ', start)
+        if next_word != -1 and next_word - start < overlap:
+            start = next_word + 1
+
+    return chunks
