@@ -3,6 +3,10 @@ from pathlib import Path
 import shutil
 import uuid
 import logging
+import PyPDF2
+import ebooklib
+from ebooklib import epub
+from bs4 import BeautifulSoup 
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -14,17 +18,30 @@ MAX_FILE_SIZE = 50 * 1024 * 1024
 async def process_file(file_path: Path) -> dict:
     try:
         file_size = file_path.stat().st_size
-
-        chunk_size = 1024 * 1024
-        content_preview = ""
+        content = ""
         
-        with open(file_path, 'rb') as f:
-            chunk = f.read(chunk_size)
-            content_preview = chunk.decode('utf-8', errors='ignore')[:1000]
+        if file_path.suffix.lower() == '.pdf':
+            with open(file_path, 'rb') as f:
+                pdf_reader = PyPDF2.PdfReader(f)
+                content = '\n'.join(page.extract_text() for page in pdf_reader.pages)
+        
+        elif file_path.suffix.lower() == '.epub':
+            logger.info(f"epub")
+            book = epub.read_epub(str(file_path))
+            logger.info(f"epub2")
+            texts = []
+            for item in book.get_items_of_type(ebooklib.ITEM_DOCUMENT):
+                soup = BeautifulSoup(item.content, 'html.parser')
+                texts.append(soup.get_text())
+            content = '\n'.join(texts)
+        
+        else:  # text file
+            with open(file_path, 'rb') as f:
+                content = f.read().decode('utf-8', errors='ignore')
         
         return {
             "file_size": file_size,
-            "preview": content_preview,
+            "text_content": content,
             "status": "processed"
         }
     except Exception as e:

@@ -6,3 +6,6 @@ langchain-openai
 pinecone[grpc]
 neo4j
 python-multipart
+PyPDF2
+EbookLib
+beautifulsoup4

@@ -39,10 +39,10 @@ async def startup_event():
     logger.info("Startup tasks completed")
 
 @app.post("/read_a_book")
-async def process_book(file: UploadFile = File(...)):
+async def read_a_book(file: UploadFile = File(...)):
     result = await extract_file_content(file)
     return StreamingResponse(process_book(result), media_type="text/event-stream")
 
 @app.post("/write_a_book")
-async def generate_book(input_data: UserInput):
+async def write_a_book(input_data: UserInput):
     return StreamingResponse(generate_book(input_data.user_input), media_type="application/json")
