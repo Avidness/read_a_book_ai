@@ -3,6 +3,7 @@ import React from 'react';
 import EmptyState from './EmptyState';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
+import FileUpload from './FileUpload';
 
 const MainChat = ({ streamData, isStreaming, fetchStream }) => {
   const handleSendMessage = (message) => {
@@ -18,6 +19,8 @@ const MainChat = ({ streamData, isStreaming, fetchStream }) => {
           <ChatMessages messages={streamData} />
         )}
       </div>
+
+      <FileUpload />
       
       <ChatInput 
         onSendMessage={handleSendMessage}
