@@ -2,7 +2,7 @@ from app.services.pinecone.ChapterAdapter import ChapterAdapter
 from app.agents.BigPictureArchitect import BigPictureArchitect
 from app.services.neo4j.CharacterGraph import CharacterGraph
 
-async def run(user_input: str):
+async def generate_book(user_input: str):
   try:
       # Create an Outline
       agent = BigPictureArchitect(user_input)
