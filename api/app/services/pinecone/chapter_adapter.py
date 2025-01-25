@@ -1,6 +1,6 @@
 from typing import List, Dict, Any, Optional
-from app.services.pinecone.PineconeAdapter import PineconeAdapter
-from app.models.Chapter import Chapter
+from app.services.pinecone.pinecone_adapter import PineconeAdapter
+from app.models.chapter import Chapter
 from dotenv import load_dotenv
 import os
 

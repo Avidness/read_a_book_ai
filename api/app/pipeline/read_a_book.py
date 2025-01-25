@@ -1,5 +1,5 @@
 import json
-from app.agents.SummaryExtractor import SummaryExtractor
+from app.agents.summary_extractor import SummaryExtractor
 from app.utils.file_utils import chunkify_textblob
 
 async def process_book(result: str):

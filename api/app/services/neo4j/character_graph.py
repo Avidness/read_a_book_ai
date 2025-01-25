@@ -1,6 +1,6 @@
 from neo4j import GraphDatabase, RoutingControl
 from typing import List, Optional
-from app.models.Character import Character
+from app.models.character import Character
 
 class CharacterGraph:
     def __init__(self, uri="bolt://neo4j:7687", auth=("neo4j", "password")):

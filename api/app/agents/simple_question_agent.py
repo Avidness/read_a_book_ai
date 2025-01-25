@@ -1,4 +1,4 @@
-from app.db.PineconeAdapter import PineconeAdapter
+from app.db.pinecone_adapter import PineconeAdapter
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os

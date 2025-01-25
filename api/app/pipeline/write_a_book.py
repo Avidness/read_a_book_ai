@@ -1,6 +1,6 @@
-from app.services.pinecone.ChapterAdapter import ChapterAdapter
-from app.agents.BigPictureArchitect import BigPictureArchitect
-from app.services.neo4j.CharacterGraph import CharacterGraph
+from app.services.pinecone.chapter_adapter import ChapterAdapter
+from app.agents.big_picture_architect import BigPictureArchitect
+from app.services.neo4j.character_graph import CharacterGraph
 
 async def generate_book(user_input: str):
   try:

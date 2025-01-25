@@ -1,6 +1,6 @@
-from app.models.Chapter import Chapter
-from app.models.Character import Character
-from app.models.Outline import Outline
+from app.models.chapter import Chapter
+from app.models.character import Character
+from app.models.outline import Outline
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import json

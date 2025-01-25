@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.pipeline.write_a_book import generate_book
 from app.pipeline.read_a_book import process_book
-from app.models.UserInput import UserInput
+from app.models.user_input import UserInput
 from dotenv import load_dotenv
 import os
 from pathlib import Path
