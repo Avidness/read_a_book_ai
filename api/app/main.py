@@ -1,9 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from app.pipeline.write_a_book import generate_book
 from app.pipeline.read_a_book import process_book
-from app.models.write.user_input import UserInput
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -42,7 +40,3 @@ async def startup_event():
 async def read_a_book(file: UploadFile = File(...)):
     result = await extract_file_content(file)
     return StreamingResponse(process_book(result), media_type="text/event-stream")
-
-@app.post("/write_a_book")
-async def write_a_book(input_data: UserInput):
-    return StreamingResponse(generate_book(input_data.user_input), media_type="application/json")

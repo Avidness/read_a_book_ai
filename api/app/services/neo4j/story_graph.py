@@ -1,8 +1,8 @@
 from neo4j import GraphDatabase, RoutingControl
 from typing import Optional
-from app.models.shared.character import Character
-from app.models.read.location import Location
-from app.models.read.relationship import Relationship 
+from app.models.character import Character
+from app.models.location import Location
+from app.models.relationship import Relationship 
 import json
 
 class StoryGraph:
