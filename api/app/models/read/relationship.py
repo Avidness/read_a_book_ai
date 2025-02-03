@@ -1,11 +1,14 @@
 from typing import Dict
-from pydantic import BaseModel
 import json
+from uuid import uuid4
+from pydantic import BaseModel, Field, UUID4
 
 class Relationship(BaseModel):
+    id: UUID4 = Field(default_factory=uuid4)
     type: str
-    source_character: str
-    target_character: str
+    description: str
+    source: str
+    target: str
     properties: Dict[str, str]
 
     def to_json(self) -> str:

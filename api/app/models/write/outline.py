@@ -1,6 +1,6 @@
 from typing import List
-from app.models.chapter import Chapter
-from app.models.character import Character
+from app.models.write.chapter import Chapter
+from app.models.shared.character import Character
 from pydantic import BaseModel
 import json
 
