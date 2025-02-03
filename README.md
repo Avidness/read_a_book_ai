@@ -1,9 +1,12 @@
-# 📚 CorpusAI 🤖
+# 📚 Read a book 🤖
 
 
 **🏗️ Work in Progress 🏗️**
 
-Tool to create a structured representation of a large text corpus.
+Iterate through a book and build out a knowledge graph based on the content.
+
+Store text blobs into Pinecone, Objects like Characters are stored in Neo4j.
+
 
 ## Tech Stack
 
@@ -44,28 +47,6 @@ Tool to create a structured representation of a large text corpus.
    ```bash
    docker-compose up
    ```
-
-
-## Use Cases
-
-### Case 1: Read a book
-Take a large blob of text like a book and extract key elements:
-* Themes
-* Characters
-* Character relationships
-* Chapter Summaries
-
-Store text blobs into Pinecone, Objects like Characters are stored in Neo4j.
-
-Ask AI a questions and receive citations.
-
-### Case 2: Write a book
-Generate Characters and relationship graph (stored in Neo4j), write each chapter (stored in Pinecone).
-
-### Case 3: Collaborative Writing
-
-Start from a generated or existing book. Change characters, or writings, generate a new book based on your changes.
-
 
 ## License
 MIT
