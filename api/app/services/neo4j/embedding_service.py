@@ -33,6 +33,36 @@ class EmbeddingService:
             
         return self.model.encode(text)
     
+    def encode_entity(self, name: str, alt_names: List[str] = None, description: str = "", weight_primary=3, weight_alt=2, weight_desc=1) -> Optional[np.ndarray]:
+        """
+        Generate an embedding for an entity, with higher weights for names.
+        
+        Args:
+            name: Primary name of the entity
+            alt_names: List of alternative names/aliases
+            description: Additional descriptive text
+            weight_primary: Weight multiplier for primary name
+            weight_alt: Weight multiplier for alternative names
+            weight_desc: Weight multiplier for descriptions
+            
+        Returns:
+            Embedding vector or None if no model is available
+        """
+        if self.model is None:
+            return self._fallback_encode(name)
+            
+        # Create a weighted text that emphasizes names and aliases
+        weighted_text = name * weight_primary + " "  # Repeat primary name to increase its weight
+        
+        if alt_names:
+            alt_names_text = " ".join(alt_names)
+            weighted_text += (alt_names_text * weight_alt) + " "
+            
+        if description:
+            weighted_text += description * weight_desc
+            
+        return self.model.encode(weighted_text)
+    
     def _fallback_encode(self, text: str) -> Optional[np.ndarray]:
         """
         Simple fallback encoding method when no model is available.

@@ -22,6 +22,46 @@ class CharacterService:
         self.embedding_model = embedding_model
         self.similarity_threshold = similarity_threshold
     
+    def generate_character_embedding(self, character: Character) -> Optional[np.ndarray]:
+        """
+        Generate an embedding for a character with emphasis on name and aliases.
+        
+        Args:
+            character: Character to generate embedding for
+            
+        Returns:
+            Embedding vector or None if no embedding model is available
+        """
+        if not self.embedding_model:
+            return None
+            
+        # Create a brief description from character attributes
+        description = ""
+        if character.physical_desc:
+            description += character.physical_desc + " "
+        if character.psychological_desc:
+            description += character.psychological_desc + " "
+        if character.arc:
+            description += character.arc
+            
+        # For characters with no embedding model, use the regular encode method
+        if not hasattr(self.embedding_model, 'encode_entity'):
+            full_text = f"{character.name} "
+            if character.alt_names:
+                full_text += " ".join(character.alt_names) + " "
+            full_text += description
+            return self.embedding_model.encode(full_text)
+            
+        # Generate embedding with weighted emphasis on names
+        return self.embedding_model.encode_entity(
+            name=character.name,
+            alt_names=character.alt_names,
+            description=description,
+            weight_primary=3,  # Primary name gets highest weight
+            weight_alt=2,      # Aliases get medium weight
+            weight_desc=1      # Description gets lowest weight
+        )
+    
     def add_character(self, character: Character, embedding=None):
         """
         Add a character node to the graph with all their properties.
@@ -35,6 +75,10 @@ class CharacterService:
             character.alt_names = [character.name]
         elif character.name not in character.alt_names:
             character.alt_names.append(character.name)
+        
+        # Generate embedding if not provided
+        if embedding is None:
+            embedding = self.generate_character_embedding(character)
         
         query = """
             MERGE (c:Character {name: $name})
@@ -52,7 +96,7 @@ class CharacterService:
             "alt_names": character.alt_names
         }
         
-        # Add embedding if provided
+        # Add embedding if available
         if embedding is not None:
             query += ", c.embedding = $embedding"
             params["embedding"] = embedding.tolist() if hasattr(embedding, "tolist") else embedding
@@ -187,20 +231,27 @@ class CharacterService:
             ))
         return results
     
-    def find_similar_character(self, character_desc: str, embedding=None) -> Optional[CharacterResult]:
+    def find_similar_character(self, character_desc: str = None, character: Character = None, embedding=None) -> Optional[CharacterResult]:
         """
         Find the most similar character based on embedding similarity.
         
         Args:
-            character_desc: Textual description of the character
+            character_desc: Textual description of the character (optional)
+            character: Character object to match (optional)
             embedding: Pre-computed embedding vector (optional)
             
         Returns:
             CharacterResult with similarity score if found, None if no similar character is found
         """
         # Generate embedding if not provided
-        if embedding is None and self.embedding_model is not None:
-            embedding = self.embedding_model.encode(character_desc)
+        if embedding is None:
+            if character:
+                embedding = self.generate_character_embedding(character)
+            elif character_desc and self.embedding_model:
+                # Just use standard encoding for text description
+                embedding = self.embedding_model.encode(character_desc)
+            else:
+                return None  # Not enough information to generate embedding
         
         if embedding is None:
             return None
@@ -237,7 +288,7 @@ class CharacterService:
             )
             
         return None
-        
+    
     def consolidate_character(self, new_character: Character, existing_character_result: CharacterResult) -> CharacterResult:
         """
         Merge information from a new character into an existing one.

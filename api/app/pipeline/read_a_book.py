@@ -102,11 +102,24 @@ def find_matching_character(character_service: CharacterService, character: Char
     if result:
         return result
     
-    # Try similar character by description
-    description = f"{character.name} {character.physical_desc} {character.psychological_desc}"
-    result = character_service.find_similar_character(description)
+    # Try similar character using embedding
+    # First check if there's enough data to do a meaningful comparison
+    has_data = bool(character.physical_desc or character.psychological_desc or character.arc or character.alt_names)
     
-    return result
+    if has_data:
+        # If we have some description or alt names, try similarity matching
+        description = f"{character.name} "
+        if character.physical_desc:
+            description += character.physical_desc + " "
+        if character.psychological_desc:
+            description += character.psychological_desc + " "
+        if character.arc:
+            description += character.arc
+            
+        result = character_service.find_similar_character(character_desc=description)
+        return result
+    
+    return None
 
 def find_matching_location(location_service: LocationService, location: Location) -> Optional[LocationResult]:
     """
@@ -129,11 +142,22 @@ def find_matching_location(location_service: LocationService, location: Location
     if result:
         return result
     
-    # Try similar location by description
-    description = f"{location.name} {location.description} {location.significance}"
-    result = location_service.find_similar_location(description)
+    # Try similar location using embedding
+    # First check if there's enough data to do a meaningful comparison
+    has_data = bool(location.description or location.significance or location.alt_names)
     
-    return result
+    if has_data:
+        # If we have some description or alt names, try similarity matching
+        description = f"{location.name} "
+        if location.description:
+            description += location.description + " "
+        if location.significance:
+            description += location.significance
+            
+        result = location_service.find_similar_location(location_desc=description)
+        return result
+    
+    return None
 
 def store_extraction_in_graph(
     character_service: CharacterService,

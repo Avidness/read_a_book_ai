@@ -21,6 +21,44 @@ class LocationService:
         self.connection = connection
         self.embedding_model = embedding_model
         self.similarity_threshold = similarity_threshold
+
+    def generate_location_embedding(self, location: Location) -> Optional[np.ndarray]:
+        """
+        Generate an embedding for a location with emphasis on name and aliases.
+        
+        Args:
+            location: Location to generate embedding for
+            
+        Returns:
+            Embedding vector or None if no embedding model is available
+        """
+        if not self.embedding_model:
+            return None
+            
+        # Create a brief description from location attributes
+        description = ""
+        if location.description:
+            description += location.description + " "
+        if location.significance:
+            description += location.significance
+            
+        # For locations with no embedding model with encode_entity, use the regular encode method
+        if not hasattr(self.embedding_model, 'encode_entity'):
+            full_text = f"{location.name} "
+            if location.alt_names:
+                full_text += " ".join(location.alt_names) + " "
+            full_text += description
+            return self.embedding_model.encode(full_text)
+            
+        # Generate embedding with weighted emphasis on names
+        return self.embedding_model.encode_entity(
+            name=location.name,
+            alt_names=location.alt_names,
+            description=description,
+            weight_primary=3,  # Primary name gets highest weight
+            weight_alt=2,      # Aliases get medium weight
+            weight_desc=1      # Description gets lowest weight
+        )
     
     def add_location(self, location: Location, embedding=None):
         """
@@ -36,6 +74,10 @@ class LocationService:
         elif location.name not in location.alt_names:
             location.alt_names.append(location.name)
         
+        # Generate embedding if not provided
+        if embedding is None:
+            embedding = self.generate_location_embedding(location)
+        
         query = """
             MERGE (l:Location {name: $name})
             SET l.description = $description,
@@ -50,7 +92,7 @@ class LocationService:
             "alt_names": location.alt_names
         }
         
-        # Add embedding if provided
+        # Add embedding if available
         if embedding is not None:
             query += ", l.embedding = $embedding"
             params["embedding"] = embedding.tolist() if hasattr(embedding, "tolist") else embedding
@@ -179,20 +221,27 @@ class LocationService:
             ))
         return results
     
-    def find_similar_location(self, location_desc: str, embedding=None) -> Optional[LocationResult]:
+    def find_similar_location(self, location_desc: str = None, location: Location = None, embedding=None) -> Optional[LocationResult]:
         """
         Find the most similar location based on embedding similarity.
         
         Args:
-            location_desc: Textual description of the location
+            location_desc: Textual description of the location (optional)
+            location: Location object to match (optional)
             embedding: Pre-computed embedding vector (optional)
             
         Returns:
             LocationResult with similarity score if found, None if no similar location is found
         """
         # Generate embedding if not provided
-        if embedding is None and self.embedding_model is not None:
-            embedding = self.embedding_model.encode(location_desc)
+        if embedding is None:
+            if location:
+                embedding = self.generate_location_embedding(location)
+            elif location_desc and self.embedding_model:
+                # Just use standard encoding for text description
+                embedding = self.embedding_model.encode(location_desc)
+            else:
+                return None  # Not enough information to generate embedding
         
         if embedding is None:
             return None
