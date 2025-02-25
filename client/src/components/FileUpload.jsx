@@ -1,14 +1,13 @@
+// components/FileUpload.jsx
 import React, { useState } from 'react';
 import { Upload, Check, AlertCircle } from 'lucide-react';
 
-const FileUpload = () => {
+const FileUpload = ({ onNewMessage, isUploading, setIsUploading }) => {
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [status, setStatus] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
-  const [processingMessages, setProcessingMessages] = useState([]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -22,7 +21,7 @@ const FileUpload = () => {
       setFile(selectedFile);
       setError('');
       setSuccess('');
-      setProcessingMessages([]);
+      onNewMessage(`File selected: ${selectedFile.name}`);
     }
   };
 
@@ -32,7 +31,9 @@ const FileUpload = () => {
     setIsUploading(true);
     setError('');
     setSuccess('');
-    setProcessingMessages([]);
+    setProgress(0);
+    setStatus('Starting upload...');
+    onNewMessage('Starting upload...');
     
     const formData = new FormData();
     formData.append('file', file);
@@ -54,48 +55,64 @@ const FileUpload = () => {
         const chunk = decoder.decode(value);
         const lines = chunk.split('\n').filter(line => line.trim());
 
-        // Process each line as a JSON message
+        // For each line in the chunk, add it as a message
         for (const line of lines) {
           try {
-            const message = JSON.parse(line);
-            console.log('Received message:', message);
-
-            switch (message.status) {
-              case 'starting':
-                setStatus('Starting upload...');
-                setProcessingMessages(prev => [...prev, message.message]);
-                break;
-              
-              case 'processing':
-                setStatus('Processing...');
-                setProcessingMessages(prev => [...prev, message.message]);
-                setProgress(50); // Set to intermediate progress
-                break;
-              
-              case 'complete':
-                setStatus('Complete');
-                setSuccess('File processed successfully!');
-                setProcessingMessages(prev => [...prev, 'Processing complete']);
-                setProgress(100);
-                setFile(null);
-                break;
-              
-              case 'error':
-                setError(message.message);
-                setStatus('Error');
-                break;
-              
-              default:
-                setProcessingMessages(prev => [...prev, JSON.stringify(message)]);
+            // Attempt to parse as JSON for backward compatibility
+            const jsonData = JSON.parse(line);
+            
+            // Handle message based on status if it's JSON
+            if (jsonData.status) {
+              switch (jsonData.status) {
+                case 'starting':
+                  setStatus('Starting upload...');
+                  setProgress(10);
+                  onNewMessage(jsonData.message || 'Starting upload...');
+                  break;
+                
+                case 'processing':
+                  setStatus('Processing...');
+                  setProgress(50);
+                  onNewMessage(jsonData.message || 'Processing...');
+                  break;
+                
+                case 'complete':
+                  setStatus('Complete');
+                  setSuccess('File processed successfully!');
+                  setProgress(100);
+                  onNewMessage(jsonData.message || 'Processing complete');
+                  setFile(null);
+                  break;
+                
+                case 'error':
+                  setError(jsonData.message || 'An error occurred');
+                  setStatus('Error');
+                  onNewMessage(`Error: ${jsonData.message || 'An error occurred'}`);
+                  break;
+                
+                default:
+                  onNewMessage(jsonData.message || JSON.stringify(jsonData));
+              }
+            } else {
+              // If it's just a regular JSON object without status
+              onNewMessage(JSON.stringify(jsonData));
             }
           } catch (e) {
-            console.error('Error parsing message:', e);
+            // If it's not JSON, treat it as a plain string message
+            onNewMessage(line);
           }
         }
+      }
+      
+      if (!error) {
+        setProgress(100);
+        setSuccess('File processed successfully!');
+        setStatus('Complete');
       }
     } catch (err) {
       setError(err.message);
       setStatus('Error');
+      onNewMessage(`Error: ${err.message}`);
     } finally {
       setIsUploading(false);
     }
@@ -144,16 +161,6 @@ const FileUpload = () => {
                 Upload File
               </button>
             )}
-          </div>
-        )}
-
-        {processingMessages.length > 0 && (
-          <div className="mt-4 space-y-1">
-            {processingMessages.map((message, index) => (
-              <p key={index} className="text-xs text-amber-200/70">
-                {message}
-              </p>
-            ))}
           </div>
         )}
 

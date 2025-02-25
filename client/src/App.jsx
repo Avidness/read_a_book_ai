@@ -1,30 +1,22 @@
-import React, { useEffect } from 'react';
-import { useStreamFetcher } from "./hooks/useStreamFetcher";
+// App.jsx
+import React, { useState } from 'react';
 import MainChat from './components/MainChat';
 
-const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
 const App = () => {
-  const { streamData, isStreaming, fetchStream } = useStreamFetcher(apiUrl);
+  const [messages, setMessages] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    streamData.forEach(chunk => {
-      try {
-        const data = JSON.parse(chunk);
-        console.log(data);
-        // TODO: parse results
-      } catch (error) {
-        console.error(error);
-      }
-    });
-  }, [streamData]);
+  const handleNewMessage = (message) => {
+    setMessages(prev => [...prev, message]);
+  };
 
   return (
     <div className="flex h-screen w-full bg-stone-900">
       <MainChat 
-        streamData={streamData}
-        isStreaming={isStreaming}
-        fetchStream={fetchStream}
+        messages={messages}
+        isUploading={isUploading}
+        onNewMessage={handleNewMessage}
+        setIsUploading={setIsUploading}
       />
     </div>
   );
