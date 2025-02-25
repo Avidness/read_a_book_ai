@@ -57,6 +57,14 @@ async def process_book(result: Dict[str, Any]) -> Generator[str, None, None]:
                   f"{len(parsed_result['locations'])} locations, " \
                   f"{len(parsed_result['relationships'])} relationships"
             
+            # Yield character names
+            for character in parsed_result['characters']:
+                yield f"\nCharacter: {character['name']}"
+
+            # Yield location names
+            for location in parsed_result['locations']:
+                yield f"\nLocation: {location['name']}"
+
             # Store the extraction in Neo4j, with automatic entity consolidation
             store_extraction_in_graph(
                 character_service=character_service,
@@ -67,16 +75,20 @@ async def process_book(result: Dict[str, Any]) -> Generator[str, None, None]:
             
             results.append(result_json)
             
-        # Retrieve consolidated entities count
-        character_count = len(character_service.get_all_characters())
-        location_count = len(location_service.get_all_locations())
-        
-        yield f"Book processed. Consolidated into {character_count} unique characters and {location_count} unique locations."
-        yield json.dumps({
-            "filename": "result.filename",
-            "processed_data": result,
-            "extraction_results": results
-        })
+        # Get all characters and locations
+        all_characters = character_service.get_all_characters()
+        all_locations = location_service.get_all_locations()
+
+        yield f"Book processed. Consolidated into {len(all_characters)} unique characters and {len(all_locations)} unique locations."
+
+        # Yield each character name
+        for character in all_characters:
+            yield f"\nCharacter: {character.name}"
+
+        # Yield each location name
+        for location in all_locations:
+            yield f"\nLocation: {location.name}"
+
     finally:
         # Ensure the connection is closed
         connection.close()
